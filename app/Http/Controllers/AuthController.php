@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Repositories\Contracts\AuthRepositoryInterface;
+use App\Services\EmailVerificationService;
 use Exception;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 
 class AuthController extends Controller
@@ -26,6 +28,7 @@ class AuthController extends Controller
                 'message' => 'NOTCREATED',
             ], 500);
         }
+        event(new Registered($user));
 
         return response()->json([
             'success' => true,
@@ -33,7 +36,7 @@ class AuthController extends Controller
         ], 201);
     }
 
-    public function Login(LoginRequest $request): JsonResponse
+    public function login(LoginRequest $request): JsonResponse
     {
 
         try {
@@ -62,5 +65,10 @@ class AuthController extends Controller
             ], 401);
         }
 
+    }
+
+    public function verify(string $id, string $hash, EmailVerificationService $service): JsonResponse
+    {
+        return $service->verify($id, $hash);
     }
 }
