@@ -42,7 +42,7 @@
     </h1>
 
     <p style="font-size:18px;color:#111827;margin-bottom:18px; font-weight:400">
-        Hi {{ $user->name ?? " მე" }},
+        Hi {{ $name }},
     </p>
 
     <p style="
