@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Notifications\CustomResetPasswordNotification;
 use App\Notifications\CustomVerifyEmailNotification;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -37,6 +38,12 @@ class User extends Authenticatable implements MustVerifyEmail
     #[Override]
     public function sendEmailVerificationNotification(): void
     {
-        $this->notify(new CustomVerifyEmailNotification());
+        $this->notify(new CustomVerifyEmailNotification);
+    }
+
+    #[Override]
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new CustomResetPasswordNotification($token));
     }
 }
