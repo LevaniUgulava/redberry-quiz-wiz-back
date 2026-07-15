@@ -42,7 +42,7 @@ class CustomVerifyEmailNotification extends Notification implements ShouldQueue
 
     protected function verificationUrl(object $notifiable): string
     {
-        $id = $notifiable->getkey();
+        $id = $notifiable->getKey();
         $hash = sha1($notifiable->getEmailForVerification());
 
         // create signed route to prevent modification and will be valid 2 hours
