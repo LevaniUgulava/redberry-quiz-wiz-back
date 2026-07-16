@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Override;
 
-#[Fillable(['user_id', 'difficulty_id', 'title', 'points', 'time_limit'])]
+#[Fillable(['user_id', 'difficulty_id', 'title', 'points', 'time_limit', 'image_url'])]
 class Quiz extends Model
 {
     #[Override]

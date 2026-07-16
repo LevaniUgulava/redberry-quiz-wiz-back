@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('quizzes', function (Blueprint $table) {
             $table->id();
+            $table->string('image_url');
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('difficulty_id')->constrained()->cascadeOnDelete();
             $table->string('title');
