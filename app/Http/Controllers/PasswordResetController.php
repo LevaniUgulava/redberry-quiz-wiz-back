@@ -13,7 +13,7 @@ class PasswordResetController extends Controller
 
     public function forgetPassword(ForgetPasswordRequest $request): JsonResponse
     {
-        return $this->passwordService->sendNotification($request);
+        return $this->passwordService->sendNotification($request->email);
     }
 
     public function resetPassword(ResetPasswordRequest $request): JsonResponse

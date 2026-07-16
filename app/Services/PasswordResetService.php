@@ -12,12 +12,10 @@ use Illuminate\Support\Str;
 
 class PasswordResetService
 {
-    public function sendNotification(Request $request): JsonResponse
+    public function sendNotification(string $email): JsonResponse
     {
 
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
+        $status = Password::sendResetLink($email);
 
         if ($status === Password::RESET_LINK_SENT) {
             return response()->json([
