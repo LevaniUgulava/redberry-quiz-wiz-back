@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Override;
 
-#[Fillable(['answer', 'is_correct'])]
+#[Fillable(['answer', 'is_correct', 'question_id'])]
 class Answer extends Model
 {
     #[Override]
-    protected function casts()
+    protected function casts(): array
     {
         return [
             'is_correct' => 'boolean',
