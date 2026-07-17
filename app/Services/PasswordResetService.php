@@ -15,7 +15,7 @@ class PasswordResetService
     public function sendNotification(string $email): JsonResponse
     {
 
-        $status = Password::sendResetLink($email);
+        $status = Password::sendResetLink(['email' => $email]);
 
         if ($status === Password::RESET_LINK_SENT) {
             return response()->json([
