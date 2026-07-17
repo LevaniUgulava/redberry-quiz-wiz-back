@@ -55,7 +55,7 @@ class QuizzesTable
                 //
             ])
             ->recordActions([
-                ViewAction::make()->iconButton()->color('success'),
+                ViewAction::make()->iconButton(),
                 ActionGroup::make([
                     EditAction::make()->slideOver(),
                     DeleteAction::make(),

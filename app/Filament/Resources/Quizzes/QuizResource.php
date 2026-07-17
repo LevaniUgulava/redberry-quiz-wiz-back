@@ -92,9 +92,12 @@ class QuizResource extends Resource
                 ->contained(false)
                 ->schema([
                     Section::make(fn ($record) => $record->question)
+                        ->description(fn ($record) => $record->type?->getLabel())
                         ->collapsible()
                         ->collapsed()
                         ->schema([
+                            TextEntry::make('points')->hiddenLabel()->icon('heroicon-o-star')
+                                ->iconColor('warning'),
                             RepeatableEntry::make('answers')
                                 ->hiddenLabel()
                                 ->grid(2)

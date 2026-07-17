@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources\Quizzes\Schemas;
 
-use Filament\Forms\Components\CheckboxList;
+use App\Enums\QuestionType;
+use App\Filament\Resources\Categories\CategoryResource;
+use App\Filament\Resources\Difficulties\DifficultyResource;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
@@ -26,7 +28,13 @@ class QuizForm
                             ->default(fn () => Auth::user()?->id)
                             ->required(),
                         TextInput::make('title')->required(),
-                        Select::make('difficulty_id')->label('Difficulty')->relationship('difficulty', 'name')->required(),
+                        Select::make('difficulty_id')
+                            ->label('Difficulty')
+                            ->relationship('difficulty', 'name')
+                            ->required()
+                            ->createOptionForm(
+                                fn (Schema $schema): array => DifficultyResource::form($schema)->getComponents()
+                            ),
                         TextInput::make('time_limit')
                             ->label('Time (Minutes)')
                             ->numeric()
@@ -36,12 +44,14 @@ class QuizForm
                             ->required()
                             ->dehydrateStateUsing(fn ($state) => (int) ($state * 60))
                             ->formatStateUsing(fn ($state) => $state ? $state / 60 : null),
-                        CheckboxList::make('categories')
+                        Select::make('categories')
                             ->relationship('categories', 'name')
                             ->columns(3)
+                            ->multiple()
                             ->searchable()
-                            ->bulkToggleable()
-                            ->gridDirection('row')
+                            ->createOptionForm(
+                                fn (Schema $schema): array => CategoryResource::form($schema)->getComponents()
+                            )
                             ->required(),
                         Hidden::make('points')
                             ->dehydrateStateUsing(function ($state, $get) {
@@ -66,7 +76,7 @@ class QuizForm
                             ->relationship('questions')
                             ->schema([
                                 TextInput::make('question')->required(),
-                                Select::make('type')->options(['one ans', 'two ans'])->required(),
+                                Select::make('type')->options(QuestionType::class)->required(),
                                 TextInput::make('points')->prefixIcon('heroicon-o-star')->required()->numeric(),
                                 Repeater::make('answers')
                                     ->label('Answers')
