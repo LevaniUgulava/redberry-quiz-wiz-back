@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\QuestionType;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -16,6 +17,7 @@ class Question extends Model
     {
         return [
             'points' => 'float',
+            'type' => QuestionType::class,
         ];
     }
 
