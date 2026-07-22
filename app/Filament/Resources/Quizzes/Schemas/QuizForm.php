@@ -66,6 +66,8 @@ class QuizForm
                             ->label('Quiz Image')
                             ->image()
                             ->visibility('public')
+                            ->disk('public')
+                            ->directory('quiz')
                             ->required(),
                     ]),
                     Step::make('Questions & Answers')->schema([
