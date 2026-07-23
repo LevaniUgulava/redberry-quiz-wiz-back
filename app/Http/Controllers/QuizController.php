@@ -8,39 +8,38 @@ use App\Http\Resources\QuizWithQuestionsResource;
 use App\Models\Quiz;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 class QuizController extends Controller
 {
     public function index(IndexRequest $request): AnonymousResourceCollection
     {
-        $perPage = $request->query('perPage', 9);
-        $userId = auth()->id();
-        $quiz = Quiz::with([
+        $perPage = $request->integer('perPage', 9);
+        $userId = auth('sanctum')->id();
+        $quizzes = Quiz::with([
             'categories',
             'difficulty',
-            'enrollments' => fn ($query) => $query->where('user_id', $userId),
+            'enrollments' => fn ($query) => $query->when($userId, fn ($q) => $q->where('user_id', $userId)),
         ])
             ->withCount('enrollments')
             ->Filter($request->validated())
             ->simplePaginate($perPage); // more optimization then paginate, that run only one query and paginate two
 
-        return QuizResource::collection($quiz);
+        return QuizResource::collection($quizzes);
     }
 
-    public function show(Quiz $quiz): JsonResource
+    public function show(Quiz $quiz): QuizResource
     {
         $quiz->load('categories');
 
         return new QuizResource($quiz);
     }
 
-    public function showWithQuestions(Quiz $quiz): JsonResource
+    public function showWithQuestions(Quiz $quiz): QuizWithQuestionsResource
     {
         $quiz->load(['questions' => function (Builder $query): void {
             $query->select('id', 'quiz_id', 'question', 'type', 'points');
         }, 'questions.answers' => function (Builder $query): void {
-            $query->select('id', 'question_id', 'answer', 'is_correct');
+            $query->select('id', 'question_id', 'answer');
         }]);
 
         return new QuizWithQuestionsResource($quiz);

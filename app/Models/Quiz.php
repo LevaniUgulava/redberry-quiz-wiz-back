@@ -75,17 +75,17 @@ class Quiz extends Model
     public function scopeFilter(Builder $query, array $filters): Builder
     {
         return $query
-            ->when($filters['search'] ?? null, function (Builder $query, $search) {
+            ->when($filters['search'] ?? null, function (Builder $query, string $search) {
                 $query->where('title', 'like', '%'.$search.'%');
-            })->when($filters['category'] ?? null, function (Builder $query, $category) {
+            })->when($filters['category'] ?? null, function (Builder $query, array $category) {
                 $query->whereHas('categories', function (Builder $query) use ($category) {
                     $query->whereIn('category_id', $category);
                 });
-            })->when($filters['difficulty_ids'] ?? null, function (Builder $query, $difficulty) {
+            })->when($filters['difficulty'] ?? null, function (Builder $query, array $difficulty) {
                 $query->whereHas('difficulty', function (Builder $query) use ($difficulty) {
                     $query->whereIn('difficulty_id', $difficulty);
                 });
-            })->when($filters['sort_by'] ?? null, function (Builder $query, $sortBy) {
+            })->when($filters['sort_by'] ?? null, function (Builder $query,string $sortBy) {
                 match ($sortBy) {
                     'a-z' => $query->orderby('title', 'asc'),
                     'z-a' => $query->orderby('title', 'desc'),
@@ -95,7 +95,7 @@ class Quiz extends Model
                     default => $query
 
                 };
-            })->when(($filters['filter'] ?? null) && Auth::check(), function (Builder $query, $filter) {
+            })->when(($filters['filter'] ?? null) && Auth::check(), function (Builder $query, string $filter) {
                 $user_id = Auth::id();
                 match ($filter) {
                     'my_quizzes' => $query->whereHas('enrollments', function (Builder $query) use ($user_id) {

@@ -18,7 +18,9 @@ class IndexRequest extends FormRequest
             'filter'=>['nullable', 'string'],
             'search' => ['nullable', 'string'],
             'category' => ['nullable', 'array'],
-            'difficulty_ids' => ['nullable', 'array'],
+            'category.*' => ['nullable', 'integer', 'exists:categories,id'],
+            'difficulty' => ['nullable', 'array'],
+            'difficulty.*' => ['nullable', 'integer', 'exists:difficulties,id'],
             'sort_by' => ['nullable', 'string'],
             'perPage' => ['nullable', 'integer', 'min:1', 'max:20'],
         ];
