@@ -40,7 +40,7 @@ class QuizController extends Controller
         $categories = $quiz->categories()->pluck('categories.id')->toArray();
 
         $quizzes = Quiz::where('id', '!=', $quiz->id)
-            ->whereHas('categories', fn (Builder $query): Builder => $query->whereIn('id', $categories))
+            ->whereHas('categories', fn (Builder $query): Builder => $query->whereIn('categories.id', $categories))
             ->with([
                 'categories',
                 'enrollments' => fn (Builder $query): ?Builder => $query->when($userId, fn (Builder $q): Builder => $q->where('user_id', $userId))])
