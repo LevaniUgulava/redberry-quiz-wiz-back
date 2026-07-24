@@ -43,7 +43,7 @@ class CustomResetPasswordNotification extends Notification implements ShouldQueu
         ]);
     }
 
-    public function verificationUrl($notifiable): string
+    public function verificationUrl(object $notifiable): string
     {
         return config('app.frontend_url')."/reset-password?token={$this->token}&email={$notifiable->email}";
     }

@@ -34,7 +34,7 @@ class QuizController extends Controller
         return new QuizResource($quiz);
     }
 
-    public function showSimilar(Quiz $quiz)
+    public function showSimilar(Quiz $quiz): AnonymousResourceCollection
     {
         $userId = auth('sanctum')->id();
         $categories = $quiz->categories()->pluck('categories.id')->toArray();
