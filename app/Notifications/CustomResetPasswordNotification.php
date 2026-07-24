@@ -35,7 +35,7 @@ class CustomResetPasswordNotification extends Notification implements ShouldQueu
      */
     public function toMail(object $notifiable): MailMessage
     {
-        $url = $this->verificationUrl();
+        $url = $this->verificationUrl($notifiable);
 
         return (new MailMessage)->view('emails.verification', [
             'name' => $notifiable->name,
@@ -43,8 +43,8 @@ class CustomResetPasswordNotification extends Notification implements ShouldQueu
         ]);
     }
 
-    public function verificationUrl(): string
+    public function verificationUrl(object $notifiable): string
     {
-        return config('app.frontend_url')."?token={$this->token}";
+        return config('app.frontend_url')."/reset-password?token={$this->token}&email={$notifiable->email}";
     }
 }
