@@ -29,9 +29,24 @@ class QuizController extends Controller
 
     public function show(Quiz $quiz): QuizResource
     {
-        $quiz->load('categories');
+        $quiz->load('categories')->loadCount(['enrollments', 'questions']);
 
         return new QuizResource($quiz);
+    }
+
+    public function showSimilar(Quiz $quiz)
+    {
+        $userId = auth('sanctum')->id();
+        $categories = $quiz->categories()->pluck('categories.id')->toArray();
+
+        $quizzes = Quiz::where('id', '!=', $quiz->id)
+            ->whereHas('categories', fn (Builder $query): Builder => $query->whereIn('id', $categories))
+            ->with([
+                'categories',
+                'enrollments' => fn (Builder $query): ?Builder => $query->when($userId, fn (Builder $q): Builder => $q->where('user_id', $userId))])
+            ->withCount('enrollments')->inRandomOrder()->limit(3)->get();
+
+        return QuizResource::collection($quizzes);
     }
 
     public function showWithQuestions(Quiz $quiz): QuizWithQuestionsResource
