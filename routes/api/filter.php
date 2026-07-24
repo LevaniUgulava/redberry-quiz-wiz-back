@@ -1,0 +1,9 @@
+<?php
+
+use App\Http\Controllers\FilterController;
+use Illuminate\Support\Facades\Route;
+
+Route::prefix('filter')->group(function () {
+    Route::get('/difficulties', [FilterController::class, 'getDifficulties']);
+    Route::get('/categories', [FilterController::class, 'getCategories']);
+});
