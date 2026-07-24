@@ -12,15 +12,15 @@ class EmailVerificationService
         $user = User::findOrFail($id);
 
         if (! hash_equals(sha1($user->getEmailForVerification()), $hash)) {
-            return response()->json(['message' => 'Invalid verification link.'], 403);
+            return response()->json(['message' => 'INVALID_LINK']);
         }
 
         if ($user->hasVerifiedEmail()) {
-            return response()->json(['message' => 'Email already verified.']);
+            return response()->json(['message' => 'ALREADY_VERIFIED']);
         }
 
         $user->markEmailAsVerified();
 
-        return response()->json(['message' => 'Email verified successfully.']);
+        return response()->json(['message' => 'SUCCESS']);
     }
 }
