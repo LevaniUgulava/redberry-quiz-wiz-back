@@ -19,7 +19,7 @@ class CalculateScoreRequest extends FormRequest
         return [
             'answers' => 'required|array',
             'answers.*.question_id' => 'required|exists:questions,id',
-            'answers.*.answer' => 'required|array',
+            'answers.*.answers' => 'required|array',
         ];
     }
 }

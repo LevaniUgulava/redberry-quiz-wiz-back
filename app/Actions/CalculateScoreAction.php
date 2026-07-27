@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\Models\Question;
 use App\Models\Quiz;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
@@ -9,9 +10,9 @@ class CalculateScoreAction
 {
     public function execute(array $data, Quiz $quiz): array
     {
-        $quiz->load(['questions.answers' => fn ($q): Relation => $q->where('is_correct', true)]);
+        $quiz->load(['questions.answers' => fn (Relation $q): Relation => $q->where('is_correct', true)]);
 
-        $answerMap = $quiz->questions->mapWithKeys(function ($q): array {
+        $answerMap = $quiz->questions->mapWithKeys(function (Question $q): array {
             return [
                 $q->id => $q->answers->pluck('id')->toArray(),
             ];
