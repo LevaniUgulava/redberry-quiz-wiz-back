@@ -51,11 +51,20 @@ class QuizController extends Controller
 
     public function showWithQuestions(Quiz $quiz): QuizWithQuestionsResource
     {
-        $quiz->load(['questions' => function (Builder $query): void {
-            $query->select('id', 'quiz_id', 'question', 'type', 'points');
-        }, 'questions.answers' => function (Builder $query): void {
-            $query->select('id', 'question_id', 'answer');
-        }]);
+        $userId = auth('sanctum')->id();
+
+        $quiz->load([
+            'questions' => function (Builder $query): void {
+                $query->select('id', 'quiz_id', 'question', 'type', 'points');
+            },
+            'questions.answers' => function (Builder $query): void {
+                $query->select('id', 'question_id', 'answer');
+            },
+            'categories',
+            'enrollments' => function (Builder $query) use ($userId): void {
+                $query->where('user_id', $userId ?? 0);
+            },
+        ])->loadCount('enrollments');
 
         return new QuizWithQuestionsResource($quiz);
 

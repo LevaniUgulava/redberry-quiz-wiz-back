@@ -15,7 +15,13 @@ class QuizWithQuestionsResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'quiz' => QuizResource::make($this),
+            'id' => $this->id,
+            'title' => $this->title,
+            'categories' => $this->categories->pluck('name'),
+            'points' => $this->points,
+            'time_limit' => $this->time_limit,
+            'started_at' => $this->enrollments->first()?->started_at,
+            'total_user' => $this->enrollments_count,
             'questions' => $this->questions,
         ];
     }
