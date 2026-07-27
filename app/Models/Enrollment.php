@@ -7,16 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Override;
 
-#[Fillable(['user_id', 'quiz_id', 'is_completed', 'score'])]
+#[Fillable(['user_id', 'quiz_id','completed_at', 'points'])]
 class Enrollment extends Model
 {
     #[Override]
     protected function casts(): array
     {
         return [
-            'started_at' => 'datetime',
             'completed_at' => 'datetime',
-            'score' => 'float',
+            'points' => 'float',
         ];
     }
 

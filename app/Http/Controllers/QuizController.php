@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\CalculateScoreAction;
+use App\Http\Requests\Quiz\CalculateScoreRequest;
 use App\Http\Requests\Quiz\IndexRequest;
 use App\Http\Resources\QuizResource;
 use App\Http\Resources\QuizWithQuestionsResource;
 use App\Models\Quiz;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Auth;
 
 class QuizController extends Controller
 {
@@ -68,5 +73,27 @@ class QuizController extends Controller
 
         return new QuizWithQuestionsResource($quiz);
 
+    }
+
+    public function enroll(Quiz $quiz): JsonResponse
+    {
+        $user = Auth::user();
+        $user->enrollments()->firstOrCreate([
+            'quiz_id' => $quiz->id,
+        ], [
+            'points' => null,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'SUCCESS',
+        ], 201);
+    }
+
+    public function calculateScore(CalculateScoreRequest $request, Quiz $quiz, CalculateScoreAction $calculateScoreAction): JsonResponse
+    {
+        $result = $calculateScoreAction->execute($request->answers, $quiz);
+
+        return response()->json($result);
     }
 }
