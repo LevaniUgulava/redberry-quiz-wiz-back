@@ -1,17 +1,13 @@
 <?php
 
-namespace App\Repositories\Eloquent;
+namespace App\Services;
 
 use App\Models\User;
-use App\Repositories\Contracts\AuthRepositoryInterface;
-use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Override;
-
-class AuthRepository extends BaseRepository implements AuthRepositoryInterface
+use Illuminate\Http\Request;
+class AuthService
 {
-    #[Override]
     public function register(array $data): User
     {
         $user = User::create([
@@ -24,13 +20,20 @@ class AuthRepository extends BaseRepository implements AuthRepositoryInterface
 
     }
 
-    #[Override]
     public function login(array $data, bool $remember): User
     {
         if (Auth::attempt($data, $remember)) {
 
             return Auth::user();
         }
-        throw new Exception('AUTH_FAILED');
+        throw new \Exception('AUTH_FAILED');
+    }
+
+    public function logout(Request $request): void
+    {
+        Auth::guard('web')->logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
     }
 }
