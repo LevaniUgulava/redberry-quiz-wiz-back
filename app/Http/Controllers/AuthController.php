@@ -4,24 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
-use App\Http\Requests\Profile\UpdateAvatarRequest;
-use App\Repositories\Contracts\AuthRepositoryInterface;
 use App\Services\AuthService;
 use App\Services\EmailVerificationService;
 use Exception;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    protected AuthService $authService;
-
-    public function __construct(AuthService $authService)
-    {
-        $this->$authService = $authService;
-    }
+    public function __construct(protected AuthService $authService
+    ) {}
 
     public function register(RegisterRequest $request): JsonResponse
     {
@@ -85,5 +78,4 @@ class AuthController extends Controller
             'message' => 'LOGOUT',
         ]);
     }
-
 }
