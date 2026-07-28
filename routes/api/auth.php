@@ -18,6 +18,12 @@ Route::middleware('guest')->group(function () {
 
 });
 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
+    Route::patch('/update-avatar', [AuthController::class, 'updateAvatar'])->name('avatar.update');
+
+});
+
 Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verify'])
     ->middleware('signed')
     ->name('verification.verify');

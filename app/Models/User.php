@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Override;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 #[Fillable(['name', 'email', 'password','avatar'])]
 #[Hidden(['password', 'remember_token'])]
@@ -56,5 +58,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function enrollments(): HasMany
     {
         return $this->hasMany(Enrollment::class);
+    }
+    protected function avatar(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value ? Storage::disk('public')->url($value) : null,
+        );
     }
 }

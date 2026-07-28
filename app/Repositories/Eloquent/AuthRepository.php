@@ -5,8 +5,10 @@ namespace App\Repositories\Eloquent;
 use App\Models\User;
 use App\Repositories\Contracts\AuthRepositoryInterface;
 use Exception;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Override;
 
 class AuthRepository extends BaseRepository implements AuthRepositoryInterface
@@ -32,5 +34,17 @@ class AuthRepository extends BaseRepository implements AuthRepositoryInterface
             return Auth::user();
         }
         throw new Exception('AUTH_FAILED');
+    }
+
+    public function updateAvatar(User $user, UploadedFile $file): User
+    {
+        if ($user->avatar) {
+            Storage::disk('public')->delete($user->avatar);
+        }
+
+        $path = $file->store('avatars', 'public');
+        $user->update(['avatar' => $path]);
+
+        return $user;
     }
 }

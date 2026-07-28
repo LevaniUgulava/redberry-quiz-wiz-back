@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\UpdateAvatarRequest;
 use App\Repositories\Contracts\AuthRepositoryInterface;
 use App\Services\EmailVerificationService;
 use Exception;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -70,5 +73,30 @@ class AuthController extends Controller
     public function verify(string $id, string $hash, EmailVerificationService $service): JsonResponse
     {
         return $service->verify($id, $hash);
+    }
+
+    public function logout(Request $request): JsonResponse
+    {
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'LOGOUT',
+        ]);
+    }
+
+    public function updateAvatar(UpdateAvatarRequest $request): JsonResponse
+    {
+        $user = $this->authRepository->updateAvatar(
+            Auth::user(),
+            $request->file('avatar')
+        );
+
+        return response()->json([
+            'success' => true,
+            'user' => $user,
+        ]);
     }
 }
