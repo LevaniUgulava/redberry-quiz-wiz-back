@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
-use App\Http\Requests\Auth\UpdateAvatarRequest;
+use App\Http\Requests\Profile\UpdateAvatarRequest;
 use App\Repositories\Contracts\AuthRepositoryInterface;
+use App\Services\AuthService;
 use App\Services\EmailVerificationService;
 use Exception;
 use Illuminate\Auth\Events\Registered;
@@ -15,16 +16,16 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    protected AuthRepositoryInterface $authRepository;
+    protected AuthService $authService;
 
-    public function __construct(AuthRepositoryInterface $authRepository)
+    public function __construct(AuthService $authService)
     {
-        $this->authRepository = $authRepository;
+        $this->$authService = $authService;
     }
 
     public function register(RegisterRequest $request): JsonResponse
     {
-        $user = $this->authRepository->register($request->validated());
+        $user = $this->authService->register($request->validated());
         if (! $user) {
             return response()->json([
                 'success' => false,
@@ -43,7 +44,7 @@ class AuthController extends Controller
     {
 
         try {
-            $user = $this->authRepository->login(
+            $user = $this->authService->login(
                 $request->only(['email', 'password']),
                 $request->boolean('checkbox'));
             if (! $user) {
@@ -77,9 +78,7 @@ class AuthController extends Controller
 
     public function logout(Request $request): JsonResponse
     {
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        $this->authService->logout($request);
 
         return response()->json([
             'success' => true,
@@ -87,16 +86,4 @@ class AuthController extends Controller
         ]);
     }
 
-    public function updateAvatar(UpdateAvatarRequest $request): JsonResponse
-    {
-        $user = $this->authRepository->updateAvatar(
-            Auth::user(),
-            $request->file('avatar')
-        );
-
-        return response()->json([
-            'success' => true,
-            'user' => $user,
-        ]);
-    }
 }
