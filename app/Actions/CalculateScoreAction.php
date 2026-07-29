@@ -10,7 +10,7 @@ class CalculateScoreAction
 {
     public function execute(array $data, Quiz $quiz): array
     {
-        $quiz->load(['questions.answers' => fn (Relation $q): Relation => $q->where('is_correct', true)]);
+        $quiz->load(['difficulty', 'questions.answers' => fn(Relation $q): Relation => $q->where('is_correct', true)])->loadCount('questions');
 
         $answerMap = $quiz->questions->mapWithKeys(function (Question $q): array {
             return [
@@ -48,7 +48,9 @@ class CalculateScoreAction
         return [
             'earnedPoints' => $earnedPoints,
             'correctAnswers' => $correctAnswers,
-        ];
-
+            'wrongAnswers' => $quiz->questions_count - $correctAnswers,
+            'question' => $quiz->questions_count,
+            'quiz_name' => $quiz->title,
+            'quiz_level' => $quiz->difficulty?->only(['name', 'hex']),];
     }
 }
