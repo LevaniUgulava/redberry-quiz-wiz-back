@@ -85,7 +85,7 @@ class Quiz extends Model
                 $query->whereHas('difficulty', function (Builder $query) use ($difficulty) {
                     $query->whereIn('difficulty_id', $difficulty);
                 });
-            })->when($filters['sort_by'] ?? null, function (Builder $query,string $sortBy) {
+            })->when($filters['sort_by'] ?? null, function (Builder $query, string $sortBy) {
                 match ($sortBy) {
                     'a-z' => $query->orderby('title', 'asc'),
                     'z-a' => $query->orderby('title', 'desc'),
@@ -95,19 +95,20 @@ class Quiz extends Model
                     default => $query
 
                 };
-            })->when(($filters['filter'] ?? null) && Auth::check(), function (Builder $query, string $filter) {
-                $user_id = Auth::id();
-                match ($filter) {
-                    'my_quizzes' => $query->whereHas('enrollments', function (Builder $query) use ($user_id) {
-                        $query->where('user_id', $user_id);
-                    }),
-                    'not_completed' => $query->whereDoesntHave('enrollments', function (Builder $query) use ($user_id) {
-                        $query->where('user_id', $user_id);
-                    })
-                };
+            })->when(Auth::check() ? ($filters['filter'] ?? null) : null,
+                function (Builder $query, string $filter) {
+                    $user_id = Auth::id();
+                    match ($filter) {
+                        'my_quizzes' => $query->whereHas('enrollments', function (Builder $query) use ($user_id) {
+                            $query->where('user_id', $user_id);
+                        }),
+                        'not_completed' => $query->whereDoesntHave('enrollments', function (Builder $query) use ($user_id) {
+                            $query->where('user_id', $user_id);
+                        })
+                    };
 
-                return $query;
-            });
+                    return $query;
+                });
 
     }
 }
