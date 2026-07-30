@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Override;
 
-#[Fillable(['user_id', 'difficulty_id', 'title', 'points', 'time_limit', 'image_url'])]
+#[Fillable(['user_id', 'difficulty_id', 'title', 'points', 'time_limit', 'image_url','description'])]
 class Quiz extends Model
 {
     #[Override]
