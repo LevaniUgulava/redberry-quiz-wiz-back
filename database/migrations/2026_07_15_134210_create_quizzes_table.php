@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('difficulty_id')->constrained()->cascadeOnDelete();
             $table->string('title');
             $table->decimal('points');
+            $table->text('description');
             $table->unsignedInteger('time_limit');
             $table->timestamps();
         });

@@ -20,6 +20,7 @@ class QuizResource extends JsonResource
             'image_url' => $this->full_image_url,
             'title' => $this->title,
             'categories' => $this->categories->pluck('name'),
+            'description'=>$this->description,
             'difficulty' => $this->difficulty->only('name', 'hex'),
             'total_points' => $this->points,
             'time_limit' => $this->time_limit,
