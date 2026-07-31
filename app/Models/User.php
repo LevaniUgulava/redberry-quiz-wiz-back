@@ -71,12 +71,6 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
 
     public function canAccessPanel(Panel $panel): bool
     {
-        // თუ მომხმარებელი ცდილობს 'app' პანელზე შესვლას, ვითხოვთ ვერიფიკაციას
-        if ($panel->getId() === 'app') {
-            return $this->hasVerifiedEmail();
-        }
-
-        // სხვა პანელებისთვის (ასეთის არსებობის შემთხვევაში) წვდომა დაშვებულია
-        return true;
+        return $this->hasVerifiedEmail();
     }
 }
