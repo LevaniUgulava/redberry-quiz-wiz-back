@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\QuestionType;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Override;
 
-#[Fillable(['question', 'type', 'points', 'quiz_id'])]
+#[Fillable(['question', 'max_selection', 'points', 'quiz_id'])]
 class Question extends Model
 {
     use HasFactory;
@@ -19,7 +18,6 @@ class Question extends Model
     {
         return [
             'points' => 'float',
-            'type' => QuestionType::class,
         ];
     }
 

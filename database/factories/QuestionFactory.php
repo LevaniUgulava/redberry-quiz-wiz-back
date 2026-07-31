@@ -23,7 +23,7 @@ class QuestionFactory extends Factory
         return [
             'quiz_id' => Quiz::factory(),
             'question' => $this->faker->sentence(),
-            'type' => $this->faker->randomElement(QuestionType::cases()),
+            'max_selection' =>$this->faker->numberBetween(1, 3),
             'points' => $this->faker->numberBetween(1, 3),
         ];
     }
