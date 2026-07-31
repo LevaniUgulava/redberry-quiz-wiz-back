@@ -26,6 +26,7 @@ class QuizResource extends JsonResource
             'time_limit' => $this->time_limit,
             'points' => $this->CompletedPoints,
             'completed_at' => $this->completedAt?->format('j F,\ Y'),
+            'started_at'=>$this->startedAt,
             'enrollments_count' => $this->enrollments_count,
             'questions_count'=>$this->questions_count
         ];
