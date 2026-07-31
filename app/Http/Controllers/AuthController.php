@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\ResendVerifyRequest;
+use App\Http\Requests\PasswordReset\ForgetPasswordRequest;
 use App\Services\AuthService;
 use App\Services\EmailVerificationService;
 use Exception;
@@ -79,9 +81,16 @@ class AuthController extends Controller
         ]);
     }
 
-    public function resendVerify(string $email,EmailVerificationService $service) : JsonResponse
+    public function resendVerify(ResendVerifyRequest $request, EmailVerificationService $service): JsonResponse
     {
-        $result = $service->resend($email);
-        return $result;
+        $result = $service->resend($request->email);
+        if (! $result) {
+            return response()->json(['message' => 'INVALID_LINK']);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'SUCCESS',
+        ], 202);
     }
 }

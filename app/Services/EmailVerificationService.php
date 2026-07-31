@@ -24,15 +24,15 @@ class EmailVerificationService
 
         return response()->json(['message' => 'SUCCESS']);
     }
-    public function resend(string $email): JsonResponse{
-        $user = User::where('email',$email )->first();
-        if(!$user){
-            return response()->json(['message' => 'INVALID_LINK']);
+
+    public function resend(string $email): bool
+    {
+        $user = User::where('email', $email)->first();
+        if (! $user) {
+            return false;
         }
         event(new Registered($user));
-        return response()->json([
-            'success' => true,
-            'message' => 'SUCCESS',
-        ], 201);
+
+        return true;
     }
 }
