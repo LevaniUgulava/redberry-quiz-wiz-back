@@ -93,6 +93,15 @@ class QuizController extends Controller
     public function calculateScore(CalculateScoreRequest $request, Quiz $quiz, CalculateScoreAction $calculateScoreAction): JsonResponse
     {
         $result = $calculateScoreAction->execute($request->answers, $quiz);
+        $user = auth('sanctum')->user();
+        if($user){
+            $user->enrollments()->where('quiz_id',$quiz->id)->update([
+                'points' => $result['earnedPoints'],
+                'completed_at'=>now()
+
+            ]);
+        }
+
 
         return response()->json($result);
     }

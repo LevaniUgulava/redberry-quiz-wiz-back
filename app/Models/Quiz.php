@@ -74,6 +74,13 @@ class Quiz extends Model
         );
     }
 
+    public function startedAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn (): ?Carbon => $this->enrollments->where('user_id', Auth::id())->first()?->created_at ?? null
+        );
+    }
+
     public function scopeFilter(Builder $query, array $filters): Builder
     {
         return $query
