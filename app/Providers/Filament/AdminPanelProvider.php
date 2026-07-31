@@ -30,6 +30,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('/')
             ->login()
             ->brandName('QuizWiz')
+            ->emailVerification()
             ->navigationGroups([
                 NavigationGroup::make()
                     ->label('Relations'),

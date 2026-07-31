@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 
 class EmailVerificationService
@@ -22,5 +23,16 @@ class EmailVerificationService
         $user->markEmailAsVerified();
 
         return response()->json(['message' => 'SUCCESS']);
+    }
+
+    public function resend(string $email): bool
+    {
+        $user = User::where('email', $email)->first();
+        if (! $user) {
+            return false;
+        }
+        event(new Registered($user));
+
+        return true;
     }
 }

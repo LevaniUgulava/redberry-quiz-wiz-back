@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('image_url');
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('difficulty_id')->constrained()->cascadeOnDelete();
-            $table->string('title');
+            $table->string('title')->index();
             $table->decimal('points');
             $table->text('description');
             $table->unsignedInteger('time_limit');
