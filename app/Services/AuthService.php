@@ -22,11 +22,19 @@ class AuthService
 
     public function login(array $data, bool $remember): User
     {
-        if (Auth::attempt($data, $remember)) {
-
-            return Auth::user();
+        if (! Auth::validate($data)) {
+            throw new \Exception('AUTH_FAILED');
         }
-        throw new \Exception('AUTH_FAILED');
+
+        $user = User::where('email', $data['email'])->first();
+
+        if (! $user->hasVerifiedEmail()) {
+            throw new \Exception('EMAIL_NOT_VERIFIED');
+        }
+
+        Auth::login($user, $remember);
+
+        return $user;
     }
 
     public function logout(Request $request): void

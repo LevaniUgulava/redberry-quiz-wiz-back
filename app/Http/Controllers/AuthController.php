@@ -78,4 +78,10 @@ class AuthController extends Controller
             'message' => 'LOGOUT',
         ]);
     }
+
+    public function resendVerify(string $email,EmailVerificationService $service) : JsonResponse
+    {
+        $result = $service->resend($email);
+        return $result;
+    }
 }
