@@ -60,7 +60,7 @@ class QuizController extends Controller
 
         $quiz->load([
             'questions' => function (Builder $query): void {
-                $query->select('id', 'quiz_id', 'question', 'type', 'points');
+                $query->select('id', 'quiz_id', 'question', 'max_selection', 'points');
             },
             'questions.answers' => function (Builder $query): void {
                 $query->select('id', 'question_id', 'answer');

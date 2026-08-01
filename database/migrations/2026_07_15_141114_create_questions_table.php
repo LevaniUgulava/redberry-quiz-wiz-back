@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
             $table->text('question');
-            $table->string('type');
+            $table->integer('max_selection')->default(1);
             $table->decimal('points');
             $table->foreignId('quiz_id')->constrained()->cascadeOnDelete();
             $table->timestamps();

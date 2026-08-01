@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Quizzes\Schemas;
 
-use App\Enums\QuestionType;
 use App\Filament\Resources\Categories\CategoryResource;
 use App\Filament\Resources\Difficulties\DifficultyResource;
 use Filament\Forms\Components\FileUpload;
@@ -48,6 +47,7 @@ class QuizForm
                             ->relationship('categories', 'name')
                             ->columns(3)
                             ->multiple()
+                            ->preload()
                             ->searchable()
                             ->createOptionForm(
                                 fn (Schema $schema): array => CategoryResource::form($schema)->getComponents()
@@ -78,7 +78,11 @@ class QuizForm
                             ->relationship('questions')
                             ->schema([
                                 TextInput::make('question')->required(),
-                                Select::make('type')->options(QuestionType::class)->required(),
+                                TextInput::make('max_selection')
+                                    ->numeric()
+                                    ->integer()
+                                    ->minValue(1)
+                                    ->required(),
                                 TextInput::make('points')->prefixIcon('heroicon-o-star')->required()->numeric(),
                                 Repeater::make('answers')
                                     ->label('Answers')

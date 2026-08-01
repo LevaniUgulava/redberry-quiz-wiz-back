@@ -19,7 +19,11 @@ class QuizzesTable
     {
         return $table
             ->columns([
-                ImageColumn::make('image_url')->label('Image')->circular(),
+                ImageColumn::make('image_url')
+                    ->label('Image')
+                    ->circular()
+                    ->getStateUsing(fn ($record) => $record->fullImageUrl),
+
                 TextColumn::make('difficulty.name')
                     ->badge()
                     ->color(function ($record) {
