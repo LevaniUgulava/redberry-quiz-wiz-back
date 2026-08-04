@@ -57,7 +57,8 @@ class QuizResource extends Resource
                         ->hiddenLabel()
                         ->circular()
                         ->height(120)
-                        ->columnSpan(1),
+                        ->columnSpan(1)
+                    ->getStateUsing(fn ($record) => $record->fullImageUrl),
 
                     TextEntry::make('title')
                         ->label('Quiz Title')
