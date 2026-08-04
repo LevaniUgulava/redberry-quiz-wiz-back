@@ -82,8 +82,27 @@ php artisan serve
 ```
 
 ## Deployment
+**Server:** VPS 
 
-_Coming soon._
+**Web server:** Nginx 
+
+**PHP version:** 8.3
+
+**Database:** SQLITE
+
+**Domain:** https://app.quiz-wiz.levan-ugulava.redberryinternship.ge
+
+### Test User
+
+For testing purposes, you can use:
+
+- **Email:** uleuschke@example.net
+- **Password:** password
+
+
+
+
+
 
 ## Resources
 
