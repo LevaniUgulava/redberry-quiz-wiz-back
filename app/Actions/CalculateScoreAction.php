@@ -10,7 +10,7 @@ class CalculateScoreAction
 {
     public function execute(array $data, Quiz $quiz): array
     {
-        $quiz->load(['difficulty', 'questions.answers' => fn(Relation $q): Relation => $q->where('is_correct', true)])->loadCount('questions');
+        $quiz->load(['difficulty', 'questions.answers' => fn (Relation $q): Relation => $q->where('is_correct', true)])->loadCount('questions');
 
         $answerMap = $quiz->questions->mapWithKeys(function (Question $q): array {
             return [
@@ -19,6 +19,7 @@ class CalculateScoreAction
         });
         $earnedPoints = 0;
         $correctAnswers = 0;
+        $partialCorrectAnswers = 0;
 
         foreach ($data as $answer) {
             $questionId = $answer['question_id'];
@@ -40,6 +41,7 @@ class CalculateScoreAction
                     if (count($matchedAnswers) > 0) {
                         $percent = count($matchedAnswers) / count($correctIds);
                         $earnedPoints += ($questionPoint * $percent);
+                        $partialCorrectAnswers++;
                     }
                 }
             }
@@ -48,9 +50,10 @@ class CalculateScoreAction
         return [
             'earnedPoints' => $earnedPoints,
             'correctAnswers' => $correctAnswers,
-            'wrongAnswers' => $quiz->questions_count - $correctAnswers,
+            'partialCorrectAnswers' => $partialCorrectAnswers,
+            'wrongAnswers' => $quiz->questions_count - $correctAnswers - $partialCorrectAnswers,
             'question' => $quiz->questions_count,
             'quiz_name' => $quiz->title,
-            'quiz_level' => $quiz->difficulty?->only(['name', 'hex']),];
+            'quiz_level' => $quiz->difficulty?->only(['name', 'hex']), ];
     }
 }

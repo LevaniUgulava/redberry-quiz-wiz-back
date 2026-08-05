@@ -8,6 +8,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\ToggleButtons;
 use Filament\Schemas\Components\Wizard;
@@ -27,6 +28,7 @@ class QuizForm
                             ->default(fn () => Auth::user()?->id)
                             ->required(),
                         TextInput::make('title')->required(),
+                        Textarea::make('description')->required(),
                         Select::make('difficulty_id')
                             ->label('Difficulty')
                             ->relationship('difficulty', 'name')
