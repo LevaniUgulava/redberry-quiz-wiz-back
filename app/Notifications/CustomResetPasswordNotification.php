@@ -40,6 +40,8 @@ class CustomResetPasswordNotification extends Notification implements ShouldQueu
         return (new MailMessage)->view('emails.verification', [
             'name' => $notifiable->name,
             'url' => $url,
+            'text' => "You're almost there! To Reset your Password,
+        please verify your email address.",
         ]);
     }
 
