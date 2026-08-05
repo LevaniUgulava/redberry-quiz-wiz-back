@@ -52,8 +52,7 @@
         margin-bottom:48px;
         font-weight:400;
     ">
-        You're almost there! To complete your sign up,
-        please verify your email address.
+        {{$text}}
     </p>
 
     <div style="text-align:center;">

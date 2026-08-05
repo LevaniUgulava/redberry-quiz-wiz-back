@@ -37,6 +37,8 @@ class CustomVerifyEmailNotification extends Notification implements ShouldQueue
         return (new MailMessage)->view('emails.verification', [
             'name' => $notifiable->name,
             'url' => $url,
+            'text' => "You're almost there! To complete your sign up,
+        please verify your email address.",
         ]);
     }
 
