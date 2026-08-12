@@ -7,8 +7,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class CalculateScoreRequest extends FormRequest
 {
-
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -17,9 +15,9 @@ class CalculateScoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'answers' => 'required|array',
-            'answers.*.question_id' => 'required|exists:questions,id',
-            'answers.*.answers' => 'required|array',
+            'answers' => 'nullable|array',
+            'answers.*.question_id' => 'required_with:answers|exists:questions,id',
+            'answers.*.answers' => 'required_with:answers|array',
         ];
     }
 }
