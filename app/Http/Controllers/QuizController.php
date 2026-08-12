@@ -48,6 +48,7 @@ class QuizController extends Controller
             ->whereHas('categories', fn (Builder $query): Builder => $query->whereIn('categories.id', $categories))
             ->with([
                 'categories',
+                'difficulty',
                 'enrollments' => fn (Builder $query): ?Builder => $query->when($userId, fn (Builder $q): Builder => $q->where('user_id', $userId))])
             ->withCount('enrollments')->inRandomOrder()->limit(3)->get();
 
